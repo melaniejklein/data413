@@ -1,0 +1,6 @@
+---
+title: "Study Guide"
+author: "Melanie Klein"
+date: "`r Sys.Date()`"
+output: html_document
+---
