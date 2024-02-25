@@ -1,0 +1,82 @@
+---
+title: "Klein_Lab3_Week4"
+author: "Melanie Klein and Lisa Liubovich"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r message=FALSE}
+library(tidyverse)
+```
+
+1.
+The vector is homogeneous. It is only composed of character elements.
+
+2.
+```{r}
+V <- c("Bears", "Lions", "Dolphins", "Eagles", "Bengals")
+V[3]
+```
+
+3.
+```{r}
+V[c(1,3,5)]
+```
+
+4.
+```{r}
+V[2:5]
+V[-1]
+```
+
+5.
+The vector is heterogeneous. It is not composed of the same types of objects. This vector includes lists, characters, and integers.
+
+6.
+```{r}
+K <- list( x = 3:7, "never", 43, y = list(10,20,30))
+length(K)
+```
+
+7.
+```{r}
+str(K[['y']])
+```
+
+8.
+```{r}
+str(K[ ])
+```
+
+9.
+```{r}
+tribble( ~x,    ~y,    ~w,    ~z,
+              210,   300,   220,   180,
+              102,   100,   119,   187,
+              176,   175,   188,   173,
+              87,    95,   91,     94,
+              202,   210,  234,    218,
+              110,   122,  131,    128,
+) -> dt
+dt
+```
+
+9a.
+```{r}
+map_dbl(dt, mean)
+```
+
+9b.
+```{r}
+map_dbl(dt, sd)
+```
+
+9c.
+```{r}
+map(dt, sqrt)
+```
+
+9d.
+```{r}
+summary(dt)
+```

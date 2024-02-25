@@ -1,0 +1,15 @@
+---
+title: "Week 5"
+author: "Melanie Klein"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#Terminal
+pwd [name]: print working directory
+cd [name]: change directory
+touch [name]: creates a new file
+mv [current name] [new name]: change file name
+rm: removes/deletes a file
+git init
+ls: lists files in working directory

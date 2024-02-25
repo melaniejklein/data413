@@ -1,0 +1,446 @@
+---
+title: "Study Guide"
+author: "Melanie Klein"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+```
+
+
+
+# Week 2
+
+## Function
+a function is a structured and sequenced set of commands that process input values to produce output values efficiently. A function reduces repetitive calculations that often result in mistakes, errors, and unneeded work.
+
+### Function Structure
+function_name <- function (argument/input variables) {
+  statements/expression for calculation/equation
+  return() or print(paste())
+}
+function_name(input values)
+
+### Print Output
+print(paste()) to print output with string and variable together. paste() converts its arguments to character strings
+
+### Function Example
+```{r message=FALSE, warning=FALSE, echo = TRUE, results = 'hide'}
+data_frame <- tibble(  
+  c1 = rnorm(50, 5, 1.5), 
+  c2 = rnorm(50, 5, 1.5),    
+  c3 = rnorm(50, 5, 1.5),    
+)
+
+data_frame$c1 -> x
+x
+
+normalize <- function(x){
+  # step 1: create the nominator
+  nominator <- x-min(x)
+  # step 2: create the denominator
+  denominator <- max(x)-min(x)
+  # step 3: divide nominator by denominator
+  normalize <- nominator/denominator
+  # return the value
+  return(normalize)
+}
+normalize(x)
+```
+
+## If Else Statement Structure
+if (condition) {
+  Expr1  (execute expression or command 1)
+} else {
+  Expr2  (execute expression or command 2)
+}
+
+### Multiple Conditions
+if
+else if
+else
+
+### If-Else Function Example
+```{r message=FALSE, warning=FALSE, echo = TRUE, results = 'hide'}
+check <- function(x) {
+  if (x > 0) {
+    result <- "Positive"
+  }
+  else if (x < 0) {
+    result <- "Negative"
+  }
+  else {
+    result <- "Zero"
+  }
+  return(result)
+}
+```
+
+## For Loop Structure
+for (i in vector) {
+   Exp	
+   }
+
+### Special For Loop Method
+```{r message=FALSE, warning=FALSE, echo = TRUE, results = 'hide'}
+mtcars 
+ 
+output <- vector("double", ncol(mtcars))   # 1. output
+for (i in seq_along(mtcars)) {             # 2. sequence
+  output[[i]] <- mean(mtcars[[i]])         # 3. body
+}
+output
+```
+
+
+
+# Week 3
+
+## Vector
+a collection of "things" or objects. They can be numbers, words, letters, or other miscellaneous items
+
+### Atomic Vectors
+the objects are of the same type
+homogeneous
+six types: logical, integer, double, character, complex, and raw
+numeric vectors: integer and double vectors
+```{r}
+V1 <- c(12, 33, 2, 82, 33)   # integers
+V2 <- c(.002, 3.6, 7.32, 4.5, 6.0) # doubles
+V3 <- c(FALSE,TRUE,TRUE,FALSE) # logical entries
+V4 <- c("JANE", "BILL", "JUAN", "EILEEN", "ANN") # character strings
+```
+
+### Lists
+the objects can be of different types
+heterogeneous
+```{r}
+L1 <- list(6, 3.8, "every", TRUE)
+L2 <- list(TRUE, 12, .0125, "cat", list(2:5))
+```
+
+## Type of a Vector
+"typeof" function to identify the vector
+```{r}
+typeof(c(11,15,20.5,37))
+typeof(list("ALICE", 2:12, TRUE, 95))
+```
+
+## Length of a Vector
+"length" to determine the number of elements
+```{r}
+length(c(11,15,20.5,37))
+length(list("ALICE", 2:12, TRUE, 95))
+```
+
+## Naming, Describing, or Listing the Content of a Vector
+use "set_names" from the purr package
+```{r}
+set_names(c("Boston","Baltimore","Atlanta", "New York","Cleveland"))
+set_names(c(14,12,.003,6,20))
+set_names(5:7, c("m", "n", "p"))
+```
+
+## Subsetting Vectors
+```{r}
+X <- c("Boston","Baltimore","Atlanta", "New York","Cleveland")
+X[1] # extract the first string
+X[c(2,4)] # extract the second and fourth strings
+X[c(2,2,2)] # extract the second string three times
+X[-4] # drop the fourth string
+```
+
+```{r}
+U <- c(10, 3, NA, 5, 8, 1, NA)
+U[is.na(U)] # extract all missing values
+U[!is.na(U)] # extract all values that are not missing
+U[U %%2 == 0 & !is.na(U)] # extract all even values
+U[U > 2] # extract all values greater than 2 and missing values
+U[] # extract all values and missing values
+```
+
+## Categorize a List
+```{r}
+Y <- list("ball", 25, 12.25, FALSE, b = 1:5, c = list(-1, "west"))
+str(Y)
+```
+
+## Subsetting Lists
+use [[]] to subset a single object
+```{r}
+Y <- list("ball", 25, 12.25, FALSE, b = 1:5, c = list(-1, "west"))
+str(Y[[1]])   
+str(Y[[4]])   
+str(Y[[6]])    
+str(Y[['c']])
+```
+
+use $ to subset a single object
+need to assign a character string to a variable before using $
+```{r}
+Y <- list("ball", 25, 12.25, FALSE, b = 1:5, c = list(-1, "west"))
+Y$b
+Y$c
+```
+
+### Subsetting to get a list from a list
+use str([])
+```{r}
+Y <- list("ball", 25, 12.25, FALSE, b = 1:5, c = list(-1, "west"))
+str(Y[1:3])
+str(Y[5:6])
+str(Y[ ])
+```
+
+## Using the purr package to map functions
+calculates values for each column
+```{r}
+mtcars
+map_dbl(mtcars, median)
+map_dbl(mtcars, sd)
+map_dbl(mtcars, max)
+```
+round values
+```{r}
+mtcars
+round(map_dbl(mtcars, sd), digits = 1) # round to the nearest tenth
+```
+piping to apply map functions
+```{r}
+mtcars
+mtcars %>%
+  map_dbl(median)
+```
+modify each value
+```{r}
+mtcars
+mtcars %>% # add 3 to each value
+  map(~. + 3)
+```
+
+## Practice Problem from Textbook
+find a linear model for each type of cylinder categories for vehicles
+4, 6, and 8 cylinder vehicles
+```{r}
+mtcars
+# linear model
+models <- mtcars %>%
+  split(.$cyl) %>%
+  map(~lm(mpg ~ wt, data = .))
+models
+# summary statistics for each model
+models %>%
+  map(summary)
+# find a particular value of the summary, r-squared found two ways
+models %>% # method 1
+  map(summary) %>% 
+  map_dbl(~.$r.squared)
+models %>% # method 2
+  map(summary) %>% 
+  map_dbl("r.squared")
+```
+
+
+
+# Week 4
+
+## Map Functions map2() and pmap()
+these functions make it possible to iterate over multiple arguments simultaneously
+
+### map2()
+the function is applied or iterated over two arguments simultaneously 
+the two vectors are of the same length
+```{r}
+x <- list(12, 14, 15, 18, 19)
+y <- list(8, 14, 20, 22, 30)
+
+# find the iterative sums
+map2(x,y, ~ .x + .y) # method 1, returns individual values
+map2_dbl(x,y, ~ .x + .y)  # method 2, returns a list
+map2_dbl(x,y,  `+`) # method 3, returns a list
+```
+
+```{r}
+x <- list(12, 14, 15, 18, 19)
+y <- list(8, 14, 20, 22, 30)
+
+# find the summary values
+map2_dbl(x,y, min)
+map2_dbl(x,y, max)
+map2_dbl(x,y, sum)
+map2_dbl(x,y, ~.y - .x ) # diff does not work, can also do ~.x - .y
+map2_dbl(x,y, mean)
+```
+
+74 - 104???
+
+### pmap()
+the function is applied or iterated over multiple arguments (more than two) simultaneously
+the vectors are of the same length
+```{r}
+x <- list(12, 14, 15, 18, 19)
+y <- list(8, 14, 20, 22, 30)
+z <- list(10, 18, 28, 34, 40)
+
+pmap_dbl(list(x,y,z), sum) # find the iterative sums
+pmap_dbl(list(x,y,z), min) # find the iterative minimums
+pmap_dbl(list(x,y,z), function(first, second, third) (first + second + third)/3) # find the iterative means
+```
+
+use iterative code to write descriptions for observations of a data frame
+```{r}
+tribble( ~Student,  ~Gender, ~Age,
+         "John",   "Male",    20,
+         "Alice",  "Female",  24,
+         "Juan",   "Male",    21,
+         "Beth",   "Female",  19,
+         "Denise", "Female",  22
+         ) -> A
+
+A %>% 
+  pmap_chr(~ str_glue("{..1} is a {..2} whose age is {..3}"))
+```
+
+using pmap on tribbles
+```{r}
+tribble( ~mean, ~sd,  ~n,
+        5,       1,   15,
+        10,      5,   10,
+        -3,      10,  20
+        ) -> parameters
+
+pmap(parameters, rnorm)
+```
+
+## While Loops
+```{r}
+i <- 1
+while (i < 6) {
+  print(i)
+  i = i+1
+}
+```
+
+## For Loops
+use the break command to end output values
+```{r}
+x <- 1:11
+for (val in x) {
+  if (val == 7){
+    break
+  }
+  print(val)
+}
+```
+
+use the next command to skip over an output value
+```{r}
+x <- 1:11
+for (val in x) {
+  if (val == 7){
+    next
+  }
+  print(val)
+}
+```
+
+loop through data frame columns using the ncol function
+```{r}
+data <- data.frame(x1 = 10:15,
+                   x2 = 66:71,
+                   x3 = 14:19)
+
+for(i in 1:ncol(data)) {
+    data[ , i] <- data[ , i] + 5 # add 5 to every value
+}
+
+data
+```
+
+## Nested Loops
+a loop within a loop
+loop (condition) {
+  block of instructions
+  loop (condition) {
+    block of instructions
+  }
+}
+```{r}
+for(i in 1:4) {
+  for(j in 1:4) {
+    print(i*j)
+  }
+}
+```
+
+### Nested loops to create a matrix
+a matrix is a rectangular array of values, characterized by rows and columns
+```{r}
+matrix1 = matrix(nrow=4, ncol=4) # create a 4 x 4 matrix(4 rows and 4 columns)
+for(i in 1:nrow(matrix1)) {        # assigned a variable 'i' for each row
+  for(j in 1:ncol(matrix1)) {     # assigned a variable 'j' for each column
+    matrix1[i,j] = i*j           # calculating product of two indices
+  }
+}
+print(matrix1)
+```
+
+```{r}
+z <- matrix(nrow = 3, ncol = 3) 
+for (m in 1:3) {
+  for (n in 1:3) {
+    z[m, n] <- m + n
+  }
+}
+print(z)
+```
+
+
+
+# Week 5
+
+## Command Line
+insert shell script (bash scripting language), hit enter, and the computer executes the command
+used to move around in your file system and run git commends
+other synonyms are shell, terminal, command line interface, and console
+R studio, scroll to Terminal, then go to New Terminal
+
+getwd(): find your working directory in R
+pwd [name]: print working directory for the terminal
+ls: print files, folders, and directories in the current directory
+cd [name]: change the working directory (eg [~/Desktop/FolderA])
+touch [name]: creates a new empty file
+rm [name]: removes a file
+cp [name] [file destination]: makes a copy of a file
+mv [current name] [new name]: renames a file
+mkdir [name]: creates a directory (eg. mkdir ~/Desktop/Folder2)
+
+## Git
+coding and processing
+git is a version control system: a progra, that tracks changes to specified files over a period of time and maintains a library of all past versions of those files
+
+## GitHub
+posting, showing, hosting
+a website that hosts git repositories
+a repository is a storage location for data and files
+the Git repository tracs all changes made to files in your project, building a history over time
+
+## Git and GitHub
+Step 1 Create a new repository on Git hub  (github.com)
+Step 2 Open Git Bash
+Step 3 Check to make sure that the location of your file matches your working directory
+Step 4 Initialize the local directory as a Git repository. enter the code statement   git init
+Step 5 git status (Identify the file that you would like to move/push to Github)
+Step 6 ls  (you are now looking at specific files that you can push to Github)
+Step 7 git add (Add the files in your new local repository. This stages it for the first commit.)
+Step 8 Commit the files that you've staged in your local repository. enter the command:  git commit -m "type a message"
+Step 9 At the top of your GitHub repository's Quick Setup page, click to copy the remote repository URL. 
+Step 10 Enter:  git remote add <some nickname> https://PATOKEN@linkdatafromGithubURL (this will set the new remote)
+Step 11 Enter: git remote -v  (this will verify the new remote URL) 
+Step 12  Enter:  git push -u <nickname> master (this code will push the file to Github)
+Step 13 Go to Github and locate your file

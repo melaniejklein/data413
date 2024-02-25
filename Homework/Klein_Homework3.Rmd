@@ -1,0 +1,110 @@
+---
+title: "Homework 3"
+author: "Melanie Klein"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+Load Packages
+
+```{r message=FALSE}
+library(tidyverse) 
+library(dplyr)
+```
+
+Vector1
+```{r}
+Vector1 <- (c( 10, 19, 121, 83, 63, 7, 77, 61, 51, 97, 123, 41))
+Vector1
+```
+
+1)  For the vector given above, use and show two methods of R coding to extract the first element and the last element.
+```{r}
+Vector1[c(1, 12)]
+Vector1[-(2:11)]
+```
+
+2)  For the vector given above, use and show two methods of R coding to extract all of the elements that are less than 60. 
+```{r}
+Vector1[Vector1<60]
+Vector1[!(Vector1>=60)]
+```
+
+3)  For the vector given above, use and show two methods of R coding to extract all numbers that are not divisible by 2 or 3. 
+```{r}
+Vector1[Vector1 %% 2 != 0 & Vector1 %% 3 != 0]
+Vector1[!(Vector1 %% 2 == 0) & !(Vector1 %% 3 == 0)]
+```
+
+4)  Use and show two R coding methods to confirm that Vector1 does not have missing values 
+```{r}
+Vector1[is.na(Vector1)] # returns that there are no missing values
+Vector1[!is.na(Vector1)] # removes missing values, the same list is returned since there are no missing values
+```
+
+MyList
+```{r}
+myList <- list(TRUE, 12.35, "pear", 48, c = 3:8, list(23, "team"))
+myList
+```
+
+5)  For the list given above, use and show R coding to confirm that "pear" is a character element.
+```{r}
+str(myList[[3]])
+```
+
+6)  For the list given above, use and show R coding to extract the first three elements of the list.
+```{r}
+myList[1:3]
+```
+
+7)  Use the $ operator to extract the element "pear" from your list. Be sure to use and show required R code to produce the requested output. 
+```{r}
+myList <- list(TRUE, 12.35, b = "pear", 48, c = 3:8, list(23, "team"))
+myList$b
+```
+
+8)  Use and show R code to write a function to solve the following quadratic equations by using the quadratic formula (all equations have two real number solutions)
+a) x2- 3x - 28 = 0 
+b) x2 + x - 30 = 0 
+c) 3x2+ 14x + 8 = 0 
+d) 2x2+11x = 6 
+```{r}
+quadratic_roots <- function(a,b,c) {
+  discriminant <- b^2 - 4*a*c
+  root1 <- (-b + sqrt(discriminant)) / (2*a)
+  root2 <- (-b - sqrt(discriminant)) / (2*a)
+  return(c(root1, root2))
+}
+
+# a)  x2- 3x - 28 = 0
+quadratic_roots(1, -3, -28)
+# b)  x2 + x  - 30 = 0
+quadratic_roots(1, 1, -30)
+# c) 3x2+ 14x + 8 = 0
+quadratic_roots(3, 14, 8)
+# d) 2x2+11x = 6
+quadratic_roots(2, 11, -6)
+```
+
+9)  In your book (towards the end of chapter 16) a special set of vectors are defined as Augmented Vectors. One such augmented vector is a Tibble. Use and show R code that will produce the Tibble shown below. Do not simply type or copy and paste. You must show and use R coding that will output the tibble. 
+```{r}
+x <- c(1:10)
+y <- c(10:1)
+z <- c(c(10:1)/2)
+a <- tibble(x,y,z)
+a
+```
+
+10) In statistics, the Interquartile Range is the difference between Q3 and Q1. Now show and use map function coding to find the Interquartile Range for each column of the tibble from number 9. 
+```{r}
+a %>%
+  map(summary) 
+
+# x
+7.75-3.25
+# y
+7.75-3.25
+# z
+3.875-1.625
+```
