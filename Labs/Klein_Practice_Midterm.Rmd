@@ -4,3 +4,119 @@ author: "Melanie Klein"
 date: "`r Sys.Date()`"
 output: html_document
 ---
+
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+```
+
+1) Using r coding demonstrated in class, Write a function that will decrease any positive number by its square root. Test your function by using the value 100.
+```{r}
+square_root <- function(num) {
+  return (num^(1/2))
+}
+square_root(100)
+```
+
+2) Using r coding demonstrated in class, Write a function that will calculate the volume and the surface area of cylinder.  Test the accuracy of your function by using a cylinder of radius 10 and a height of 4.5. (Your answers should be 1413.7167 and 911.0619)
+```{r}
+cylinder <- function (radius, height) {
+  volume = pi * radius^2 * height
+  surface_area = 2 * pi * radius * height + 2 * pi * radius^2
+  return (c(volume, surface_area))
+}
+cylinder (10, 4.5)
+```
+
+3) Using the if-else coding structure demonstrated in class, write a function that will determine if a number is divisible by 9. If your number is divisible by 9, the function generates the following statement: this number is divisible by 9. If the function is not divisible by 9, the function 
+produces a statement that reads: this number is not divisible by 9. Test your function by using the numbers 153 and 2009.
+```{r}
+nine <- function (num) {
+  if (num %% 9 == 0) {
+    return ("this number is divisible by 9")
+  }
+  else {
+    return ("this number is not divisible by 9")
+  }
+}
+nine(153)
+nine(2009)
+```
+
+4) Using r coding methods demonstrated in class, write a function that will produce the difference between the cubes and the squares of the first 10 positive integers. Your out put should be given in reverse order. The following number sequence should be produced:
+900 648 448 294 180 100  48  18   4   0
+```{r}
+cube_square <- function (num) {
+  difference = num^3 - num^2
+  return (rev(difference))
+}
+cube_square(1:10)
+```
+
+5)  U <- c(“Maine” , “Texas”, “Delaware”, “Oregon”, “Utah”, “Vermont”, “Ohio”)
+a)  Is U an atomic vector or a list ?
+U is an atomic vector because all of the objects are characters
+b)  Use and show R code that will extract the elements  “Maine” and “Vermont”.
+c)  Use and show R code that will extract all elements except “Texas”.
+d)  Use and show R code that will produce the length of U.
+```{r}
+U <- c("Maine" , "Texas", "Delaware", "Oregon", "Utah", "Vermont", "Ohio")
+U[c(1,6)]
+U[-2]
+length(U)
+```
+
+6)  V = list(“Chicago”, k = list( 2, 6, 18, 24), FALSE, 13, 1.3,  y = 1:10)
+a)  Is V an atomic vector or a list ?
+V is a list because the objects are different types
+b)  Use and show R code that will extract the 5th element of V.
+c)  If the vector V is a list, use and show R code to identify the type of each object in V.
+```{r}
+V = list("Chicago", k = list( 2, 6, 18, 24), FALSE, 13, 1.3,  y = 1:10)
+V[[5]]
+str(V)
+```
+
+7) Copy paste and run the tribble given below.
+```{r}
+tribble( ~John,    ~Raymond,    ~Martha,    ~Alice,   ~Juan,
+              86,            77,                  81,              88,           90,
+              79,            78,                  85,              81,           78,
+              76,            75,                  88,              94,           81,
+              84,            90,                  71,               84,           89,
+              100,          80,                  93,              85,            84,
+              90,            73,                  70,              88,            93
+         ) -> TestScores
+TestScores
+```
+a) Use and show R code (a map function) to find the median for each column.
+b) Use and show R code (a map function) to find the cube root of each column element.
+c)  Use and show R code (a map function) to convert each column value to 0.
+```{r}
+map_dbl(TestScores, median)
+map_df(TestScores, ~map_dbl(.x, ~(.^ (1/3))))
+map_df(TestScores, ~map_dbl(.x, ~0))
+```
+
+
+8)  Use and show R code, as demonstrated in class to produce the following matrix,
+```{r}
+z <- matrix(nrow = 3, ncol = 4) 
+for (m in 1:3) {
+  for (n in 1:4) {
+    z[m, n] <- -(m + n)^2
+  }
+}
+print(z)
+```
+
+9) Using the midwest data table, produce and show R code that will produce 20 observational rows of the table given below that only shows the first five observational rows. Use tidyverse/dplyr commands. Note that the state abbreviation WI has been changed to Wisconsin and Wisconsin is the only state listed.
+```{r}
+data(midwest)
+midwest %>%
+  filter(state == "WI") %>%
+  mutate(state = ifelse(state == "WI", "Wisconsin", state)) %>%
+  select(state, county, area, percollege) %>%
+  head(20)
+```
+
