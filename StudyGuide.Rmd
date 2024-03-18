@@ -444,3 +444,21 @@ Step 10 Enter:  git remote add <some nickname> https://PATOKEN@linkdatafromGithu
 Step 11 Enter: git remote -v  (this will verify the new remote URL) 
 Step 12  Enter:  git push -u <nickname> master (this code will push the file to Github)
 Step 13 Go to Github and locate your file
+
+
+
+# Week 7
+
+## Creating a Branch
+$cd ~/Documents                         # Change directory to the "Documents" folder
+$ cd ~/Documents/Folder100              # Move into the "Folder100" directory within "Documents"
+$ git branch branch67                   # Create a new branch named "branch67"
+$ git checkout branch67                 # Switch to the newly created "branch67" branch
+$ touch fb100a                          # Create an empty file named "fb100a"
+$ ls                                    # List the files in the current directory to verify the creation of "fb100a"
+$ git add -A                            # Stage all changes, including the newly created file, for the upcoming commit
+$ git commit -m "file fb100a added"     # Commit the changes with a commit message
+$  git log -1                           # Display the last commit details, including the commit message
+$ git checkout master                   # Switch back to the "master" branch
+$ git merge branch67                    # Merge the changes from "branch67" into the "master" branch
+$ git log --graph                       # Display a graphical representation of the commit history, showing the branching and merging of commits.
