@@ -8,11 +8,8 @@ library(data.table)
 # Use data.table for large data sets that you read
 # in with fread()
 
-# Let's read in a data table.  Do not forget to set your working directory.
-
-getwd()
-setwd("Notes/Week8")
-getwd()
+# Let's read in a data table.  Do not forget to set your working
+# directory.
 
 # Using a data.table read in.
 
@@ -39,16 +36,20 @@ class(flights2)
 
 
 
-# Now let us take a look at the structure and data identification for the data table
+# Now let us take a look at the structure and data identification
+# for the data table
 
 str(flights1)  # data.table way
+
 
 glimpse(flights2)  # tidyverse way
 
 # Filtering/Arranging Rows (Observations)
 
-# Just like in the tidyverse, we use logicals to filter based on rows. The syntax for this is to place 
-# the logicals inside a bracket. Let's find all flights that left JFK and arrived at LAX.
+# Just like in the tidyverse, we use logicals to 
+# filter based on rows. The syntax for this is to place 
+# the logicals inside a bracket. Let's find all flights 
+# that left JFK and arrived at LAX.
 
 # data.table way
 flights1[origin == "JFK" & dest == "LAX"]
@@ -61,7 +62,8 @@ flights2 %>%
 
 # data.table
 
-# To get a specific row(s), insert the number(s) into the brackets.
+# To get a specific row(s), insert the number(s) into the 
+# brackets.
 
 # let's extract one row; row 3
 flights1[3]    # insert the the row number in brackets
@@ -230,7 +232,9 @@ flights1
 
 # Group Summaries
 
-# You calculate summaries in the column slot. It's best to use the list method.
+# You calculate summaries in the column slot. 
+# It's best to use the list method.
+
 # Lets find the mean for departure delays
 
 # data.table way
@@ -345,7 +349,7 @@ table5 %>%
 # Lets find the mean of arrival delays(gouping
 # by origin and destination) for the carrier AmerAir.
 
-#tidyverse way and then alphabetizing by origin.
+#tidyverse way and then alphabetizing by orgin.
 flights2 %>%
   select(carrier,origin, dest)%>%
   filter(carrier == "AmerAir") %>%
