@@ -462,3 +462,119 @@ $  git log -1                           # Display the last commit details, inclu
 $ git checkout master                   # Switch back to the "master" branch
 $ git merge branch67                    # Merge the changes from "branch67" into the "master" branch
 $ git log --graph                       # Display a graphical representation of the commit history, showing the branching and merging of commits.
+
+
+
+# Week 8
+
+## Data.table versus Tidyverse
+
+## Read in Data
+```{r}
+flights1 <- fread("nycdata.csv") # data.table
+flights2 <- read_csv("nycdata.csv") # tidyverse
+```
+
+## Structure and Data Identification
+```{r}
+str(flights1) # data.table
+glimpse(flights2) # tidyverse
+```
+
+## Filtering/Arranging Rows
+```{r}
+flights1[origin == "JFK" & dest == "LAX"] # data.table
+flights2 %>% # tidyverse
+  select(carrier,origin,dest)%>%
+  filter(origin == "JFK", dest == "LAX") 
+```
+
+## Extract Rows
+```{r}
+flights1[c(1, 3, 207)] # data.table
+flights2%>% # tidyverse
+  slice(1, 3, 207)
+```
+
+## Reorder Rows
+```{r}
+flights1[order(origin, -dest)] # data.table
+flights2 %>% # tidyverse
+  select(year,month,day,carrier,origin,dest)%>%
+  arrange(origin, desc(dest))
+```
+
+## Select Columns/Variables
+```{r}
+flights1[, .(origin, dest)] # data.table
+flights1[, list(origin, dest)] # data.table
+flights1[, c("origin", "dest")] # data.table
+flights1[, origin:dest] # data.table
+flights2 %>% # tidyverse
+  select(origin, dest)
+```
+
+## Remove Columns
+```{r}
+flights1[, !c("year", "month")] # data.table
+flights1[, !(year:month)] # data.table
+flights2%>% # tidyverse
+  select(-year, -month)
+```
+
+Unlike the tidyverse, you filter rows and select columns in one call for the data.table method rather than using two or more separate functions.
+```{r}
+flights1[origin == "JFK" & dest == "LAX", .(year, month, day, hour, origin, dest)]
+```
+
+## Create New Variables (Mutate)
+
+... row 177 datadottablelesson
+
+
+
+
+
+
+
+# Week 9
+
+## Forking
+Forking is the process characterized by creating a copy (a fork) of a repository. Changes and edits are made to this forked copy that will not immediately affect the original repository. If the changes are satisfactory to the owner of the original  repository, these changes are merged to the original repository.
+
+Step 1 Go to you’re Github home page and select a Repository to fork.
+would like to fork too. I will choose the American1 location. You are now working on the copy
+of the original repository
+Step 2 Choose a file to edit by clicking on Go to file.
+Step 3 select the file that you wish to edit.
+Step 4 Click on the pencil and edit. (I will add code and eliminate code)
+Step 5 Scroll to the bottom (select the option Commit directly to the master branch) and click
+on the green tab Commit Changes
+Step 6 Now click on Pull requests (located at the upper left of the page)
+Step 7 Now click on the green tab New Pull Request
+Now the owner of the original repository views and processes changes/edits to his or her
+original repository.
+Step 8 Scroll and view proposed edits (additions are indicated in green/deletions are indicated
+in red)
+Step 9 Click on the green tab Create Pull Request and click on the green tab Create Pull
+Request also at the bottom of the page
+Step 10 Click on the green tab Merge Pull Request (In the center of the page)
+Step 11 Now click on the tab Co
+
+
+
+# Week 10
+
+## SQL
+Structured Query Language is a standard language used for database creation and manipulation.
+We will use the sqldf Data Base Management system to deliver and modify SQL Data tables.
+```{r}
+install.packages("sqldf")
+library(sqldf)
+```
+
+
+
+
+
+
