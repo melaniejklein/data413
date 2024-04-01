@@ -23,7 +23,10 @@ sqldf("SELECT * FROM Orange")
 
 # We can produce the familiar "iris" data in a similar
 # way.
-sqldf("SELECT * FROM iris")
+sqldf("SELECT * FROM iris") -> xyz
+xyz
+library(tidyverse)
+as_tibble(xyz)
 
 
 # Let's output 15 data elements of the variable age
@@ -75,7 +78,7 @@ iris2
 
 sqldf('SELECT * FROM BOD WHERE Time IN (1,7)')
 
-sqldf('SELECT * FROM BOD WHERE Time NOT IN (1,7)')
+
 library(tidyverse)
 data (rock)
 rock -> rockdata
@@ -259,7 +262,13 @@ sqldf('SELECT *
 
 # Select the diamonds that have prices less than $2000
 # How many are they?
+sqldf('SELECT *
+      FROM diamonds
+      WHERE price < 2000')
 
+sqldf('SELECT COUNT(*)
+      FROM diamonds
+      WHERE price < 2000')
 
 # Get the diamonds that have either Premium or Ideal cut and have a clarity of
 # SI2
@@ -267,7 +276,3 @@ sqldf('SELECT *
 
 # What are the categories of clarity in the data?
 # How many are they?
-
-
-
-

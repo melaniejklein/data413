@@ -1,0 +1,58 @@
+---
+title: "Klein_Lab_Week10"
+author: "Melanie Klein"
+date: "`r Sys.Date()`"
+output: html_document
+---
+# CLASS PRACTICE EXERCISE
+
+```{r message=FALSE}
+library(sqldf)
+diamonds <- ggplot2::diamonds
+diamonds
+```
+
+# Select the diamonds that have prices less than $2000
+# How many are they?
+```{r}
+sqldf('SELECT *
+      FROM diamonds
+      WHERE price < 2000
+      LIMIT 10')
+```
+
+```{r}
+sqldf('SELECT COUNT(*)
+      FROM diamonds
+      WHERE price < 2000')
+```
+
+# Get the diamonds that have either Premium or Ideal cut and have a clarity of SI2
+# How many are they?
+```{r}
+sqldf('SELECT *
+      FROM diamonds
+      WHERE (cut = "Premium" OR cut = "Ideal") 
+      AND clarity = "SI2"
+      LIMIT 10')
+```
+
+```{r}
+sqldf('SELECT COUNT(*)
+      FROM diamonds
+      WHERE (cut = "Premium" OR cut = "Ideal") 
+      AND clarity = "SI2"')
+```
+
+# What are the categories of clarity in the data?
+# How many are they?
+```{r}
+sqldf('SELECT DISTINCT clarity
+      FROM diamonds
+      LIMIT 10')
+```
+
+```{r}
+sqldf('SELECT COUNT(DISTINCT clarity)
+      FROM diamonds')
+```
