@@ -27,7 +27,7 @@ shinyApp(ui = ui, server = server)
 
 
 # 2 Use and show R code that will create a shiny app that produces a boxplot for any variable of the iris data set. The layout is provided below. 
-```{r}
+
 ui <- fluidPage(
   titlePanel("Iris Box Plots"),
   selectInput("vars", "Variables", 
@@ -47,6 +47,7 @@ shinyApp(ui = ui, server = server)
 
 
 # 3 Use and show R code that will create a shiny app that produces multiple choice options for choosing favorite sports. The shiny layout is provided below.
+
 sports <- c("Football", "Basketball", "Baseball", "Tennis", "Soccer")
 ui <- fluidPage(
   titlePanel("Play Ball !"),
