@@ -4,3 +4,68 @@ author: "Melanie Klein"
 date: "`r Sys.Date()`"
 output: html_document
 ---
+
+# Using the mpg data in the ggplot2 package, attempt the following questions using SQL script.
+# Suggestion: Explore the data using the techniques learned in the class to
+# familiarize yourself with the data. You can also use mpg in the console to
+# get a better understanding of what the columns mean.
+
+Load Packages
+```{r message=FALSE}
+library(tidyverse) 
+library(dplyr)
+```
+
+1. How many records are in the table?
+```{r}
+
+```
+
+2. What are the classes of cars we have in the table?
+```{r}
+
+```
+
+3. How many categories of models of cars do we have in the data and what are they?
+```{r}
+
+```
+
+4. How many manual(m5) cars do we have in the table?
+```{r}
+
+```
+
+5. How many compact cars are made by audi?
+```{r}
+
+```
+
+6. How many chevrolet cars are mustang model?
+```{r}
+
+```
+
+7. What are the top 2 land rover cars with least engine displacements?
+```{r}
+
+```
+
+8. What are the top 15 suv cars that were made in the year 1999 
+HINT: suv is a class of car
+```{r}
+
+```
+
+9. What are the top 10 cars by highway miles per gallon that are either ford or dodge and are made in 2008
+HINT order by highway miles per gallon in descending order to get the top 10
+```{r}
+
+```
+
+10. What are the top 10 compact or pickup cars with highway miles per gallon is between 15 and 17, ordered by displ in ascending order and year in descending order
+```{r}
+
+```
+
+
