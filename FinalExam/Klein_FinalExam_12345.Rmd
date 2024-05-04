@@ -5,26 +5,200 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r message=FALSE, warning=FALSE}
+library(tidyverse)
+library(dplyr)
+library(data.table)
+library(rvest)
 ```
 
-## R Markdown
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+1
+Use the link https://forecast.weather.gov/MapClick.php?CityName=Washington&state=DC&site=LWX&textField1=38.895&textField2=-77.0373&e=1#.YLPCyflKiUk R code and the Web Scraping methods illustrated in class to collect data on weather for Denver Colorado.  The entire table is given below (There may be differences in your table, but structurally, you should get a table very similar to the one shown below.  Do not forget to use Chrome and Selector Gadget. Show and use all R code needed for this problem
 
-```{r cars}
-summary(cars)
+```{r}
+weatherurl <- read_html("https://forecast.weather.gov/MapClick.php?lat=39.7385&lon=-104.9849")
+
+DayNight <- weatherurl %>%
+  html_nodes(".period-name") %>%
+  html_text()
+
+Temperatures <- weatherurl %>%
+  html_nodes(".temp") %>%
+  html_text()
+
+Forecasts <- weatherurl %>%
+  html_nodes(".short-desc") %>%
+  html_text()
+
+weather_data <- data.frame(
+  DayNight = DayNight,
+  Temperatures = Temperatures,
+  Forecasts = Forecasts,
+  DayorNight = DayNight
+)
+
+weather_data
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+2
+a) Use data.table coding to read in the nyc data as was done in class. Assign the data table to the variable flights3 (The nycdata.csv is found on Canvas in the Data.Table module 3/18/2024)
+```{r}
+flights3 <- fread("nycdata.csv")
+```
+b) Use data.table coding to modify flights3 so that only the column variables origin, dest, and carrier appear.
+```{r}
+flights3[, c("origin", "dest", "carrier")]
+```
+c) Now use data.table coding that reflects an origin of JFK, a destination of SEA and a carrier of only Delta Airlines DL.
+```{r}
+flights3[origin == "JFK" & dest == "SEA" & carrier == "DL"]
+```
+d) Use data.table coding to remove the variable air_time from the original flights3 data table.
+```{r}
+flights3[, !("air_time")]
+```
+e) Use and show data.table coding to output the maximum and the minimum values for the variable distance.
+```{r}
+max_distance <- max(flights3$distance)
+max_distance
+min_distance <- min(flights3$distance)
+min_distance
+```
+f) Use two or three sentences to explain the summary provided below and then use and show data.table coding to produce the table.
+
+The summary calculates the mean distance traveled by each carrier. The following code creates grouped summaries by simultaneously grouping and calculating summaries. It uses the by argument to specify grouping by carrier.
+```{r}
+flights3[, .(meandistance = mean(distance)) , by = .(carrier)]
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+
+3
+Provided below is the famous poem  “Stopping by the Wood On a Snowy Evening”  by Robert Frost.
+Use the text mining sequence of steps and the R code modeled in class to a) create a tibble, b) find line locations of words, c) produce a word frequency table, and d) and create a bar graph data visualization plot that will also display word frequency trends.
+Hint(do not forget to process a single spaced body of text; be careful about commas and double quotation marks. Use the examples demonstrated in class.)
+Whose woods these are I think I know.
+His house is in the village though;
+He will not see me stopping here
+To watch his woods fill up with snow.
+My little horse must think it queer
+To stop without a farmhouse near
+Between the woods and frozen lake
+The darkest evening of the year.
+He gives his harness bells a shake
+To ask if there is some mistake.
+The only other sound’s the sweep
+Of easy wind and downy flake.
+The woods are lovely, dark and deep,
+But I have promises to keep,
+And miles to go before I sleep,
+And miles to go before I sleep.
+
+```{r message=FALSE}
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+```
+
+```{r}
+poem <- tibble(
+  text = c(
+    "Whose woods these are I think I know.
+    His house is in the village though;
+    He will not see me stopping here
+    To watch his woods fill up with snow. 
+    My little horse must think it queer
+    To stop without a farmhouse near
+    Between the woods and frozen lake
+    The darkest evening of the year.
+    He gives his harness bells a shake
+    To ask if there is some mistake.
+    The only other sound’s the sweep 
+    Of easy wind and downy flake.
+    The woods are lovely, dark and deep,
+    But I have promises to keep,
+    And miles to go before I sleep,
+    And miles to go before I sleep."
+  )
+)
+```
+
+
+
+4
+Go to and study the textmining R file again, Using the code provided, change the text link and produce your own word cloud. Screen shot your word cloud and post the image on Canvas. I used the link for the “I have a Dream Speech”, Find your own text source to use as data for your word cloud.
+
+I used The Hill We Climb by Amanda Gorman. https://thehill.com/homenews/news/535052-read-transcript-of-amanda-gormans-inaugural-poem/
+
+```{r message=FALSE}
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
+```
+
+```{r warning=FALSE}
+file_path <- "TheHillWeClimb.txt"
+text <- readLines(file_path)
+docs <- Corpus(VectorSource(text))
+inspect(docs)
+```
+
+```{r warning=FALSE}
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+```
+
+```{r warning=FALSE}
+# Convert the text to lower case
+docs <- tm_map(docs, content_transformer(tolower))
+# Remove numbers
+docs <- tm_map(docs, removeNumbers)
+# Remove your own stop word
+# specify your stopwords as a character vector
+docs <- tm_map(docs, removeWords, c("we’ve", "isn’t", "we’ll", "we’re", "won’t", "doesn’t", "it’s"))
+# Remove english common stopwords
+docs <- tm_map(docs, removeWords, stopwords("english"))
+# Remove punctuations
+docs <- tm_map(docs, removePunctuation)
+# Eliminate extra white spaces
+docs <- tm_map(docs, stripWhitespace)
+```
+
+```{r}
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+head(d, 10)
+```
+
+```{r}
+set.seed(1234)
+wordcloud(words = d$word, freq = d$freq, min.freq = 1,
+          max.words=200, random.order=FALSE, rot.per=0.35, 
+          colors=brewer.pal(8, "Dark2"))
+```
+
+
+
+5
+Use and show an R coding structure (found in your notes) that will produce the following matrix
+```{r}
+a <- matrix(nrow = 5, ncol = 5) 
+for (b in 1:5) {
+  for (c in 1:5) {
+    a[b, c] <- (b + c)^3
+  }
+}
+print(a)
+```
+
+
