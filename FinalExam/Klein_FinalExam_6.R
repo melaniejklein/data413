@@ -18,7 +18,7 @@ iris%>%
 
 # Define the UI
 ui <- fluidPage(
-  titlePanel("Melanie Klein"),
+  h1("Melanie Klein", style = "color:blue"),
   h3("FINAL EXAM Shiny App Iris Data", style = "color:red"),
   setBackgroundColor(
     color = "yellow"),

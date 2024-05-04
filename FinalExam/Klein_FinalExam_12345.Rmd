@@ -5,16 +5,22 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+Load Packages
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(dplyr)
 library(data.table)
 library(rvest)
+library("tm")
+library("SnowballC")
+library("wordcloud")
+library("RColorBrewer")
 ```
 
 
 
 1
+
 Use the link https://forecast.weather.gov/MapClick.php?CityName=Washington&state=DC&site=LWX&textField1=38.895&textField2=-77.0373&e=1#.YLPCyflKiUk R code and the Web Scraping methods illustrated in class to collect data on weather for Denver Colorado.  The entire table is given below (There may be differences in your table, but structurally, you should get a table very similar to the one shown below.  Do not forget to use Chrome and Selector Gadget. Show and use all R code needed for this problem
 
 ```{r}
@@ -45,6 +51,7 @@ weather_data
 
 
 2
+
 a) Use data.table coding to read in the nyc data as was done in class. Assign the data table to the variable flights3 (The nycdata.csv is found on Canvas in the Data.Table module 3/18/2024)
 ```{r}
 flights3 <- fread("nycdata.csv")
@@ -78,9 +85,10 @@ flights3[, .(meandistance = mean(distance)) , by = .(carrier)]
 
 
 3
-Provided below is the famous poem  “Stopping by the Wood On a Snowy Evening”  by Robert Frost.
-Use the text mining sequence of steps and the R code modeled in class to a) create a tibble, b) find line locations of words, c) produce a word frequency table, and d) and create a bar graph data visualization plot that will also display word frequency trends.
-Hint(do not forget to process a single spaced body of text; be careful about commas and double quotation marks. Use the examples demonstrated in class.)
+
+Provided below is the famous poem  “Stopping by the Wood On a Snowy Evening” by Robert Frost.
+Use the text mining sequence of steps and the R code modeled in class to a) create a tibble, b) find line locations of words, c) produce a word frequency table, and d) and create a bar graph data visualization plot that will also display word frequency trends. Hint(do not forget to process a single spaced body of text; be careful about commas and double quotation marks. Use the examples demonstrated in class.)
+
 Whose woods these are I think I know.
 His house is in the village though;
 He will not see me stopping here
@@ -98,49 +106,56 @@ But I have promises to keep,
 And miles to go before I sleep,
 And miles to go before I sleep.
 
-```{r message=FALSE}
-library("tm")
-library("SnowballC")
-library("wordcloud")
-library("RColorBrewer")
+```{r warning=FALSE}
+file_path <- "StoppingbytheWoodOnaSnowyEvening.txt"
+text <- readLines(file_path)
+docs <- Corpus(VectorSource(text))
+inspect(docs)
+```
+
+```{r warning=FALSE}
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+```
+
+```{r warning=FALSE}
+# Convert the text to lower case
+docs <- tm_map(docs, content_transformer(tolower))
+# Remove numbers
+docs <- tm_map(docs, removeNumbers)
+# Remove english common stopwords
+docs <- tm_map(docs, removeWords, stopwords("english"))
+# Remove punctuations
+docs <- tm_map(docs, removePunctuation)
+# Eliminate extra white spaces
+docs <- tm_map(docs, stripWhitespace)
 ```
 
 ```{r}
-poem <- tibble(
-  text = c(
-    "Whose woods these are I think I know.
-    His house is in the village though;
-    He will not see me stopping here
-    To watch his woods fill up with snow. 
-    My little horse must think it queer
-    To stop without a farmhouse near
-    Between the woods and frozen lake
-    The darkest evening of the year.
-    He gives his harness bells a shake
-    To ask if there is some mistake.
-    The only other sound’s the sweep 
-    Of easy wind and downy flake.
-    The woods are lovely, dark and deep,
-    But I have promises to keep,
-    And miles to go before I sleep,
-    And miles to go before I sleep."
-  )
-)
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+d
 ```
 
+```{r}
+ggplot(d, aes(x = word, y = freq)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Word Frequency Trends",
+       x = "Word",
+       y = "Frequency") +
+   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
 
 4
+
 Go to and study the textmining R file again, Using the code provided, change the text link and produce your own word cloud. Screen shot your word cloud and post the image on Canvas. I used the link for the “I have a Dream Speech”, Find your own text source to use as data for your word cloud.
 
 I used The Hill We Climb by Amanda Gorman. https://thehill.com/homenews/news/535052-read-transcript-of-amanda-gormans-inaugural-poem/
-
-```{r message=FALSE}
-library("tm")
-library("SnowballC")
-library("wordcloud")
-library("RColorBrewer")
-```
 
 ```{r warning=FALSE}
 file_path <- "TheHillWeClimb.txt"
@@ -190,6 +205,7 @@ wordcloud(words = d$word, freq = d$freq, min.freq = 1,
 
 
 5
+
 Use and show an R coding structure (found in your notes) that will produce the following matrix
 ```{r}
 a <- matrix(nrow = 5, ncol = 5) 
@@ -200,5 +216,3 @@ for (b in 1:5) {
 }
 print(a)
 ```
-
-
